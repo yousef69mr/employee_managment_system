@@ -255,6 +255,7 @@ const EmployeeForm = (props: Props) => {
                 Languages
               </h2>
             </div>
+            
             <Button
               type="button"
               size={"sm"}
@@ -271,73 +272,75 @@ const EmployeeForm = (props: Props) => {
               <span className="hidden sm:block">Add Language</span>
             </Button>
           </div>
-          <div className="grid grid-cols-3 gap-8">
-            {form.getValues()["knownLanguages"]?.map((item, index) => (
-              <div
-                key={index}
-                className="flex w-full max-w-sm items-center space-y-2 md:space-y-0 md:space-x-2  flex-wrap md:flex-nowrap"
-              >
-                <FormField
-                  control={form.control}
-                  name={`knownLanguages.${index}.languageName`}
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>{`Language ${index + 1}`}</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={isLoading}
-                          placeholder="ex: Java, Perl, ... etc"
-                          {...form.control.register(
-                            `knownLanguages.${index}.languageName`
-                          )}
-                          defaultValue={item.languageName} // set default value from defaultValues
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`knownLanguages.${index}.scoreOutof100`}
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>{`Score ${index + 1}`}</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={isLoading}
-                          placeholder="example: Developer, Manager, ... etc"
-                          type="number"
-                          {...form.control.register(
-                            `knownLanguages.${index}.scoreOutof100`
-                          )}
-                          defaultValue={item.scoreOutof100} // set default value from defaultValues
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  size={"icon"}
-                  variant={"destructive"}
-                  type="button"
-                  onClick={() =>
-                    form.setValue(
-                      "knownLanguages",
-                      form
-                        .getValues()
-                        .knownLanguages.filter((_, i) => i !== index)
-                    )
-                  }
-                  className="self-end"
+          {form.getValues()["knownLanguages"]?.length > 0 && (
+            <div className="grid grid-cols-3 gap-8">
+              {form.getValues()["knownLanguages"]?.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex w-full max-w-sm items-center space-y-2 md:space-y-0 md:space-x-2  flex-wrap md:flex-nowrap"
                 >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
+                  <FormField
+                    control={form.control}
+                    name={`knownLanguages.${index}.languageName`}
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>{`Language ${index + 1}`}</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={isLoading}
+                            placeholder="ex: Java, Perl, ... etc"
+                            {...form.control.register(
+                              `knownLanguages.${index}.languageName`
+                            )}
+                            defaultValue={item.languageName} // set default value from defaultValues
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`knownLanguages.${index}.scoreOutof100`}
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>{`Score ${index + 1}`}</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={isLoading}
+                            placeholder="example: Developer, Manager, ... etc"
+                            type="number"
+                            {...form.control.register(
+                              `knownLanguages.${index}.scoreOutof100`
+                            )}
+                            defaultValue={item.scoreOutof100} // set default value from defaultValues
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    size={"icon"}
+                    variant={"destructive"}
+                    type="button"
+                    onClick={() =>
+                      form.setValue(
+                        "knownLanguages",
+                        form
+                          .getValues()
+                          .knownLanguages.filter((_, i) => i !== index)
+                      )
+                    }
+                    className="self-end"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
           <Separator />
           <Button type="submit" disabled={isLoading}>
             {isLoading ? (

@@ -61,8 +61,8 @@ public class EmployeeService {
 
     public Employee createEmployee(Employee newEmployee) throws IOException {
         // Assign a new employee ID (for simplicity, not recommended for production)
-        int newEmployeeId = employees.stream().mapToInt(Employee::getObjectId).max().orElse(0) + 1;
-        newEmployee.setObjectId(newEmployeeId);
+//        int newEmployeeId = employees.stream().mapToInt(Employee::getObjectId).max().orElse(0) + 1;
+//        newEmployee.setObjectId(newEmployeeId);
 
         employees.add(newEmployee);
 
@@ -75,6 +75,7 @@ public class EmployeeService {
 
         if (existingEmployee != null) {
             // Update employee details
+            existingEmployee.setEmployeeID(updatedEmployee.getEmployeeID());
             existingEmployee.setFirstName(updatedEmployee.getFirstName());
             existingEmployee.setLastName(updatedEmployee.getLastName());
             existingEmployee.setDesignation(updatedEmployee.getDesignation());
