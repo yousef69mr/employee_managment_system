@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -14,18 +14,23 @@ const EmployeesPage = lazy(() => import("@/components/pages/employees"));
 const SingleEmployeePage = lazy(
   () => import("@/components/pages/single-employee")
 );
+const SearchEmployeesPage = lazy(
+  () => import("@/components/pages/search-employees")
+);
 
 function App() {
   return (
     <Suspense fallback={<Loading className=" h-screen" />}>
       <ScrollToTopButton />
       <Navbar />
-      
+
       <main>
         <Router>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/employees" element={<EmployeesPage />} />
+            <Route path="/employees" element={<EmployeesPage />}>
+              <Route path="search" element={<SearchEmployeesPage />} />
+            </Route>
             <Route
               path="/employees/:employeeId"
               element={<SingleEmployeePage />}

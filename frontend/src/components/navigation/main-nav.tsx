@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const MainNav = (props: React.HTMLAttributes<HTMLElement>) => {
   const { className } = props;
 
-//   const params = useParams();
+  //   const params = useParams();
   const pathname = window.location.pathname;
 
   const routes = [
@@ -18,6 +18,11 @@ const MainNav = (props: React.HTMLAttributes<HTMLElement>) => {
       href: `/employees`,
       label: "Employees",
       active: pathname === `/employees`,
+    },
+    {
+      href: `/employees/search`,
+      label: "Search",
+      active: pathname === `/employees/search`,
     },
   ];
   return (

@@ -30,21 +30,23 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
-
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+  columns: (ColumnDef<TData, TValue> & { type?: string })[];
   data: TData[];
-  searchKey?: string;
+  initialSearchKey?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchKey,
+  initialSearchKey,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [searchKey, setSearchKey] = useState<string | undefined>(
+    initialSearchKey
+  );
 
   const table = useReactTable({
     data,
@@ -63,6 +65,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  // console.log(table.getColumn(searchKey || "")?.columnDef.type);
   return (
     <div>
       {searchKey && (
@@ -72,11 +75,36 @@ export function DataTable<TData, TValue>({
             value={
               (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
             }
-            onChange={(event) =>
-              table.getColumn(searchKey)?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
+            onChange={(event) => {
+              table.getColumn(searchKey)?.setFilterValue(event.target.value);
+            }}
+            className="max-w-sm mr-1"
           />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="mr-auto">
+                Search Key
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.columnDef.type === "string")
+                .map((column) => {
+                  // console.log(column)
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={searchKey === column.id}
+                      onCheckedChange={() => setSearchKey(column.id)}
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
@@ -133,7 +161,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} >
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

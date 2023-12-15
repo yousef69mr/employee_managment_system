@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { apiInstance } from "@/lib/axios";
 import EmployeeTable from "@/components/tables/employees/employee-table";
 import { Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Heading from "@/components/helpers/heading";
@@ -47,7 +47,7 @@ const Employees = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-1 justify-between space-y-4 p-8 pt-6">
+      <div className="flex flex-1 justify-between space-y-4 py-8 pt-6">
         <Heading
           title={`Employees (${employees?.length})`}
           description="Manage employees for your system"
@@ -59,6 +59,7 @@ const Employees = () => {
       </div>
       <Separator />
       <EmployeeTable employees={employees} />
+      <Outlet/>
     </div>
   );
 };

@@ -12,7 +12,11 @@ import {
 import ProgressList from "@/components/helpers/progress-list";
 import CellAction from "./cell-actions";
 
-export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
+export type EmployeeColumnDef<TData> = ColumnDef<TData> & {
+  type?: string; // Replace 'string' with the actual type you want to use
+};
+
+export const EmployeeColumns: EmployeeColumnDef<EmployeeType>[] = [
   {
     accessorKey: "employeeID",
     header: ({ column }) => {
@@ -26,6 +30,8 @@ export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
         </Button>
       );
     },
+    type: "number",
+    // cell: ({ row }) => <div>{row.original.employeeID.toString()}</div>,
   },
   {
     accessorKey: "firstName",
@@ -40,6 +46,7 @@ export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
         </Button>
       );
     },
+    type: "string",
   },
   {
     accessorKey: "lastName",
@@ -54,6 +61,7 @@ export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
         </Button>
       );
     },
+    type: "string",
   },
   {
     accessorKey: "designation",
@@ -68,6 +76,7 @@ export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
         </Button>
       );
     },
+    type: "string",
   },
   {
     accessorKey: "knownLanguages",
@@ -102,6 +111,7 @@ export const EmployeeColumns: ColumnDef<EmployeeType>[] = [
         </TooltipProvider>
       );
     },
+    type: "number",
   },
   {
     id: "actions",

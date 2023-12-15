@@ -13,7 +13,7 @@ const EmployeeTable = (props: Props) => {
       <DataTable
         data={employees}
         columns={EmployeeColumns}
-        searchKey="designation"
+        initialSearchKey="designation"
       />
     </div>
   );

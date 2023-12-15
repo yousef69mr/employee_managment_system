@@ -4,13 +4,12 @@ import com.example.soa.models.Employee;
 import com.example.soa.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,18 +39,31 @@ public class EmployeeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Employee>> searchEmployees(@RequestParam(required = false) String designation) {
-        List<Employee> employees=employeeService.getAllEmployees();;
-        ArrayList<Employee> filteredEmployees = new ArrayList<>();
+    public ResponseEntity<List<Employee>> searchEmployees(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) Integer employeeId,
+            @RequestParam(required = false) String designation,
+            @RequestParam(required = false) String languageName,
+            @RequestParam(required = false,defaultValue = "0") Integer minScore,
+            @RequestParam(required = false,defaultValue = "100") Integer maxScore,
+            @RequestParam(required = false,defaultValue = "employeeID") String sortKey,
+            @RequestParam(required = false, defaultValue = "asc") String sortBy) {
 
-        if(designation!=null){
-            for(Employee employee:employees){
-                if(employee.getDesignation().equalsIgnoreCase(designation)){
-                    filteredEmployees.add(employee);
-                }
-            }
+        List<Employee> matchedEmployees = employeeService.searchEmployees(firstName, employeeId, designation, languageName, minScore, maxScore);
+
+        if (matchedEmployees.isEmpty()) {
+            return new ResponseEntity<>(matchedEmployees, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(filteredEmployees, HttpStatus.OK);
+
+//        sort result
+        List<Employee> sortedEmployees = employeeService.sortEmployees(matchedEmployees,sortKey);
+
+        // Apply sorting order
+        if ("desc".equalsIgnoreCase(sortBy)) {
+            Collections.reverse(sortedEmployees);
+        }
+
+        return new ResponseEntity<>(sortedEmployees, HttpStatus.OK);
     }
 
     @PostMapping
@@ -70,6 +82,7 @@ public class EmployeeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable int employeeId) {
         boolean deleted = employeeService.deleteEmployee(employeeId);
