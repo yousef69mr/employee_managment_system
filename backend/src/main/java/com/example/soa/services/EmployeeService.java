@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,9 +19,9 @@ public class EmployeeService {
 
     public EmployeeService() throws IOException {
         employees = new ArrayList<>();
-
-        File jsonFile = new ClassPathResource(JSON_FILE_PATH).getFile();
         try {
+            File jsonFile = new ClassPathResource(JSON_FILE_PATH).getFile();
+
             if (jsonFile.exists()) {
                 // If the file exists, load data from it
                 loadEmployeesFromJsonFile();
@@ -34,25 +34,40 @@ public class EmployeeService {
 
                 if (isCreated) {
                     saveEmployeesToJsonFile();
+                } else {
+                    throw new IOException("Failed to create JSON file");
                 }
 
             }
+        } catch (FileNotFoundException e) {
+            // Handle the file not found exception
+            throw new IOException("JSON file not found", e);
+        } catch (IOException e) {
+            // Handle other IO exceptions
+            throw new IOException("Error initializing EmployeeService", e);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new IOException(e.getMessage());
         }
     }
 
     private void loadEmployeesFromJsonFile() throws IOException {
+
         ObjectMapper objectMapper = new ObjectMapper();
         ClassPathResource resource = new ClassPathResource(JSON_FILE_PATH);
-        Employee[] loadedEmployees = objectMapper.readValue(resource.getInputStream(), Employee[].class);
-        employees.addAll(Arrays.asList(loadedEmployees));
+
+        try (InputStream inputStream = resource.getInputStream()) {
+            Employee[] loadedEmployees = objectMapper.readValue(inputStream, Employee[].class);
+            employees.addAll(Arrays.asList(loadedEmployees));
+        }
     }
 
     private void saveEmployeesToJsonFile() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new ClassPathResource(JSON_FILE_PATH).getFile();
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, employees);
+        ClassPathResource resource = new ClassPathResource(JSON_FILE_PATH);
+
+        try (OutputStream outputStream = Files.newOutputStream(resource.getFile().toPath())) {
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(outputStream, employees);
+        }
     }
 
     public List<Employee> getAllEmployees() {

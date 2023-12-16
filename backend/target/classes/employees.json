@@ -1,1 +1,10 @@
-[]
+[ {
+  "firstName" : "John",
+  "lastName" : "Adamo",
+  "employeeID" : 2000,
+  "designation" : "Developer",
+  "knownLanguages" : [ {
+    "languageName" : "perl",
+    "scoreOutof100" : 29
+  } ]
+} ]
