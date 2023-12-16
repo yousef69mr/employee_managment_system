@@ -21,18 +21,24 @@ public class EmployeeService {
         employees = new ArrayList<>();
 
         File jsonFile = new ClassPathResource(JSON_FILE_PATH).getFile();
-
-        if (jsonFile.exists()) {
-            // If the file exists, load data from it
-            loadEmployeesFromJsonFile();
-        } else {
-            // If the file doesn't exist, generate default data and save it to the file
+        try {
+            if (jsonFile.exists()) {
+                // If the file exists, load data from it
+                loadEmployeesFromJsonFile();
+            } else {
+                // If the file doesn't exist, generate default data and save it to the file
 //            generateDefaultData();
-            boolean isCreated = jsonFile.createNewFile();
 
-            if (isCreated) {
-                saveEmployeesToJsonFile();
+
+                boolean isCreated = jsonFile.createNewFile();
+
+                if (isCreated) {
+                    saveEmployeesToJsonFile();
+                }
+
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
