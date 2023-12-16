@@ -5,6 +5,7 @@ import { apiInstance } from "@/lib/axios";
 import axios from "axios";
 import { EmployeeType } from "@/types";
 import Loading from "../loading";
+import toast from "react-hot-toast";
 
 const SingleEmployee = () => {
   const [employee, setEmployee] = useState<EmployeeType | null>(null);
@@ -31,7 +32,7 @@ const SingleEmployee = () => {
       if (axios.isCancel(error)) {
         console.error(error);
       } else {
-        alert(error as string);
+        toast.error(error as string);
       }
     } finally {
       setIsFetching(false);
