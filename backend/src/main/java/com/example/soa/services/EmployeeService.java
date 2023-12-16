@@ -28,9 +28,9 @@ public class EmployeeService {
         } else {
             // If the file doesn't exist, generate default data and save it to the file
 //            generateDefaultData();
-            boolean isCreated=jsonFile.createNewFile();
+            boolean isCreated = jsonFile.createNewFile();
 
-            if(isCreated){
+            if (isCreated) {
                 saveEmployeesToJsonFile();
             }
         }
@@ -146,14 +146,19 @@ public class EmployeeService {
         return filteredEmployees;
     }
 
-    public List<Employee> searchEmployees(String firstName, Integer employeeId, String designation, String languageName, Integer minScore, Integer maxScore) {
+    public List<Employee> searchEmployees(String firstName, String lastName, Integer employeeId, String designation, String languageName, Integer minScore, Integer maxScore) {
         return employees.stream()
-                .filter(employee -> (firstName == null || employee.getFirstName().equalsIgnoreCase(firstName)))
-                .filter(employee -> (employeeId == null || employee.getEmployeeID() == employeeId))
-                .filter(employee -> (designation == null || employee.getDesignation().equalsIgnoreCase(designation)))
+                .filter(employee -> isNullOrEqualsIgnoreCase(firstName, employee.getFirstName()))
+                .filter(employee -> isNullOrEqualsIgnoreCase(lastName, employee.getLastName()))
+                .filter(employee -> (employeeId == null || employeeId.equals(employee.getEmployeeID())))
+                .filter(employee -> isNullOrEqualsIgnoreCase(designation, employee.getDesignation()))
                 .filter(employee -> (languageName == null || hasLanguage(employee, languageName)))
-                .filter(employee -> (minScore == null || maxScore == null || hasLanguageWithScoreInRange(employee, languageName, minScore, maxScore)))
+                .filter(employee -> (minScore == null || maxScore == null || languageName == null || hasLanguageWithScoreInRange(employee, languageName, minScore, maxScore)))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isNullOrEqualsIgnoreCase(String value1, String value2) {
+        return value1 == null || value2 != null && value2.equalsIgnoreCase(value1);
     }
 
     private boolean hasLanguage(Employee employee, String languageName) {

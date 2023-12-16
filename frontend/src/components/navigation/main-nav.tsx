@@ -19,11 +19,11 @@ const MainNav = (props: React.HTMLAttributes<HTMLElement>) => {
       label: "Employees",
       active: pathname === `/employees`,
     },
-    {
-      href: `/employees/search`,
-      label: "Search",
-      active: pathname === `/employees/search`,
-    },
+    // {
+    //   href: `/employees/search`,
+    //   label: "Search",
+    //   active: pathname === `/employees/search`,
+    // },
   ];
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>

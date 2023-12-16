@@ -41,7 +41,8 @@ public class EmployeeController {
     @GetMapping("/search")
     public ResponseEntity<List<Employee>> searchEmployees(
             @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) Integer employeeId,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) Integer employeeID,
             @RequestParam(required = false) String designation,
             @RequestParam(required = false) String languageName,
             @RequestParam(required = false,defaultValue = "0") Integer minScore,
@@ -49,8 +50,9 @@ public class EmployeeController {
             @RequestParam(required = false,defaultValue = "employeeID") String sortKey,
             @RequestParam(required = false, defaultValue = "asc") String sortBy) {
 
-        List<Employee> matchedEmployees = employeeService.searchEmployees(firstName, employeeId, designation, languageName, minScore, maxScore);
+        List<Employee> matchedEmployees = employeeService.searchEmployees(firstName,lastName, employeeID, designation, languageName, minScore, maxScore);
 
+//        System.out.println(matchedEmployees);
         if (matchedEmployees.isEmpty()) {
             return new ResponseEntity<>(matchedEmployees, HttpStatus.NOT_FOUND);
         }
@@ -62,6 +64,7 @@ public class EmployeeController {
         if ("desc".equalsIgnoreCase(sortBy)) {
             Collections.reverse(sortedEmployees);
         }
+
 
         return new ResponseEntity<>(sortedEmployees, HttpStatus.OK);
     }

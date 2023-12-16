@@ -1,12 +1,11 @@
 import { string, object, array, coerce } from "zod";
-import { apiInstance } from "../axios";
+import { apiInstance } from "@/lib/axios";
 import axios from "axios";
 import { EmployeeType } from "@/types";
 
-
 const EmployeeIDValidator = async (value: number) => {
   const url = window.location.href;
-  
+
   const regex = /\/employees\/(\d+)$/;
 
   // Use the regular expression to extract the <id> value
@@ -14,7 +13,6 @@ const EmployeeIDValidator = async (value: number) => {
 
   // Check if there's a match and get the <id> value
   const employeeId = match ? match[1] : null;
-
 
   const cancelToken = axios.CancelToken.source();
 
@@ -29,7 +27,7 @@ const EmployeeIDValidator = async (value: number) => {
 
     const employees: EmployeeType[] = employeePromise.data;
     const takenIds = employees.map((employee) => employee.employeeID);
-    
+
     return !takenIds.includes(value) || Number(employeeId) === value;
   } catch (error) {
     if (axios.isCancel(error)) {
@@ -67,4 +65,16 @@ export const EmployeeSchema = object({
         .max(100),
     })
   ),
+});
+
+export const EmployeeSearhSchema = object({
+  searchKeys: array(string()),
+  sortBy: string().min(1, { message: "Language Name is required" }),
+  firstName: string(),
+  lastName: string(),
+  designation: string(),
+  employeeID: string(),
+  languageName: string(),
+  minScore: coerce.number().min(0).max(100),
+  maxScore: coerce.number().min(0).max(100),
 });
