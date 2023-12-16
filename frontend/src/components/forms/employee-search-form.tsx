@@ -68,7 +68,7 @@ const EmployeeSearchForm = (props: Props) => {
     // console.log(values.searchKeys);
     for (let key of Object.keys(values) as Array<keyof EmployeeFormValues>) {
       if (values.searchKeys.includes(key) && values[key].toString() !== "") {
-        console.log(key, values[key]);
+        // console.log(key, values[key]);
         urlSearchParams.append(key, values[key].toString());
       }
     }
@@ -80,8 +80,8 @@ const EmployeeSearchForm = (props: Props) => {
     if (values["sortBy"] === "desc") {
       urlSearchParams.append("sortBy", values["sortBy"].toString());
     }
-    console.log(window.location.pathname, window.location.search);
-    console.log(urlSearchParams.size, urlSearchParams.toString());
+    // console.log(window.location.pathname, window.location.search);
+    // console.log(urlSearchParams.size, urlSearchParams.toString());
     navigate(`/employees?${urlSearchParams.toString()}`, { replace: true });
 
     if (handleClose) {

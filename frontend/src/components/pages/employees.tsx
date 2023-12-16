@@ -35,7 +35,7 @@ const Employees = () => {
       if (axios.isCancel(error)) {
         console.error(error);
       } else {
-        alert(error as string);
+        toast.error(error as string);
       }
     }
 
