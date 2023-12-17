@@ -90,6 +90,7 @@ const Employees = () => {
       fetchFilteredEmployeesData();
     } else {
       fetchEmployeesData();
+      document.title = "All Employees";
     }
 
     // console.log(searchParams)

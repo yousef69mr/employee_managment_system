@@ -52,7 +52,11 @@ const SingleEmployee = () => {
   }, [params.employeeId]);
 
   useEffect(() => {
-    document.title = `${employee?.firstName ?? ""} ${employee?.lastName ?? ""}  #${employee?.employeeID ?? ""}`;
+    document.title = employee
+      ? `${employee?.firstName ?? ""} ${employee?.lastName ?? ""}  #${
+          employee?.employeeID ?? ""
+        }`
+      : "Add Employee";
   }, [employee]);
   return (
     <div className="flex flex-col">
