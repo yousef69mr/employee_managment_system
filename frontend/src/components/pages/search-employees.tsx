@@ -26,6 +26,7 @@ const SearchEmployees = () => {
     languageName: "",
     minScore: 0,
     maxScore: 100,
+    scoreRange: [0, 100] as [number, number],
   });
   const [isOpened, setIsOpened] = useState(false);
   const [searchParams] = useSearchParams();
@@ -49,9 +50,21 @@ const SearchEmployees = () => {
   useEffect(() => {
     const initialSearchKeys = [];
     const NotSearchKeys = ["minScore", "maxScore", "sortKey", "sortBy"];
-    let fields: Record<string, string> = {};
+    let fields: Record<string, string | number | [number, number]> = {};
     for (let key of Object.keys(searchFields)) {
       let value = searchParams.get(`${key}`);
+
+      if (["minScore", "maxScore"].includes(key)) {
+        const min = searchParams.get(`minScore`)
+          ? Number(searchParams.get(`minScore`))
+          : 0;
+        const max = searchParams.get(`maxScore`)
+          ? Number(searchParams.get(`maxScore`))
+          : 100;
+        fields["scoreRange"] = [min, max];
+        fields["minScore"] = min;
+        fields["maxScore"] = max;
+      }
       // console.log(key, value);
       if (value !== null && !NotSearchKeys.includes(key)) {
         // setSearchFields({ ...searchFields, [key]: value });
@@ -59,7 +72,9 @@ const SearchEmployees = () => {
         initialSearchKeys.push(key);
       }
     }
+
     // console.log(initialSearchKeys);
+    // console.log(fields);
     setSearchFields({
       ...searchFields,
       ...fields,

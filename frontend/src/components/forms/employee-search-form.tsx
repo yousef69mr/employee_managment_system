@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useForceUpdate } from "@/hooks/use-force-update";
+import { RangeSlider } from "@/components/ui/range-slider";
 
 interface Props {
   initialData: EmployeeSearchType | null;
@@ -61,17 +62,23 @@ const EmployeeSearchForm = (props: Props) => {
     defaultValues: {
       ...initialData,
       employeeID: initialData?.employeeID?.toString() || "",
+      scoreRange: initialData?.scoreRange as [number, number],
     },
   });
   const onSubmit = async (values: EmployeeFormValues) => {
     const urlSearchParams = new URLSearchParams();
     // console.log(values.searchKeys);
+    const NotSearchKeys = [""];
     for (let key of Object.keys(values) as Array<keyof EmployeeFormValues>) {
-      if (values.searchKeys.includes(key) && values[key].toString() !== "") {
+      if (
+        values.searchKeys.includes(key) &&
+        !NotSearchKeys.includes(values[key].toString())
+      ) {
         // console.log(key, values[key]);
         urlSearchParams.append(key, values[key].toString());
       }
     }
+
     if (values.searchKeys.includes("languageName")) {
       urlSearchParams.append("sortKey", values["languageName"].toString());
       urlSearchParams.append("minScore", values["minScore"].toString());
@@ -300,7 +307,7 @@ const EmployeeSearchForm = (props: Props) => {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="minScore"
                 render={({ field }) => (
@@ -329,6 +336,34 @@ const EmployeeSearchForm = (props: Props) => {
                         disabled={isLoading}
                         placeholder="max: 100"
                         {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4" />
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="scoreRange"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-4 items-center gap-x-4 w-full">
+                    <FormLabel>Score Range</FormLabel>
+                    <FormControl className="col-span-3">
+                      <RangeSlider
+                        disabled={isLoading}
+                        // {...field}
+                        values={field.value as [number, number]}
+                        defaultValue={field.value}
+                        max={100}
+                        min={0}
+                        step={1}
+                        onValueChange={(values) => {
+                          console.log(values);
+
+                          form.setValue("minScore", values[0]);
+                          form.setValue("maxScore", values[1]);
+                        }}
                       />
                     </FormControl>
                     <FormMessage className="col-span-4" />

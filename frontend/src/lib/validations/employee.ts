@@ -1,4 +1,4 @@
-import { string, object, array, coerce } from "zod";
+import { string, object, array, coerce, number } from "zod";
 import { apiInstance } from "@/lib/axios";
 import axios from "axios";
 import { EmployeeType } from "@/types";
@@ -77,4 +77,17 @@ export const EmployeeSearhSchema = object({
   languageName: string(),
   minScore: coerce.number().min(0).max(100),
   maxScore: coerce.number().min(0).max(100),
+  scoreRange: array(number())
+  .refine((values) => values.length === 2, {
+    message: 'Range must have exactly two values.',
+  })
+  .refine(([min, max]) => min <= max, {
+    message: 'The first value must be less than or equal to the second value.',
+  })
+  .refine(([min, max]) => min >= 0 && max <= 100, {
+    message: 'Values must be in the range of 0 to 100.',
+  })
+  .refine(([min, max]) => typeof min === 'number' && typeof max === 'number', {
+    message: 'Each value in the range must be a number.',
+  })
 });
