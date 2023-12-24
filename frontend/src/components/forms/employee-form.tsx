@@ -19,6 +19,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -163,13 +169,20 @@ const EmployeeForm = (props: Props) => {
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
-          <Button
-            size={"icon"}
-            variant={"destructive"}
-            onClick={() => setOpenAlert(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size={"icon"}
+                  variant={"destructive"}
+                  onClick={() => setOpenAlert(true)}
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Delete</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </div>
       <Separator />
@@ -213,23 +226,29 @@ const EmployeeForm = (props: Props) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="employeeID"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Employee ID</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="Enter Employee ID"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {typeof initialData?.employeeID !== "number" && (
+              <FormField
+                control={form.control}
+                name="employeeID"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Employee ID</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={
+                          initialData?.employeeID
+                            ? typeof initialData?.employeeID === "number"
+                            : isLoading
+                        }
+                        placeholder="Enter Employee ID"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="designation"
@@ -255,7 +274,7 @@ const EmployeeForm = (props: Props) => {
                 Languages
               </h2>
             </div>
-            
+
             <Button
               type="button"
               size={"sm"}
@@ -274,7 +293,7 @@ const EmployeeForm = (props: Props) => {
           </div>
           {form.getValues()["knownLanguages"]?.length > 0 && (
             <div className="grid grid-cols-3 gap-8">
-              {form.getValues()["knownLanguages"]?.map((item, index) => (
+              {form.getValues()["knownLanguages"]?.map((_, index) => (
                 <div
                   key={index}
                   className="flex w-full max-w-sm items-center space-y-2 md:space-y-0 md:space-x-2  flex-wrap md:flex-nowrap"
@@ -292,7 +311,7 @@ const EmployeeForm = (props: Props) => {
                             {...form.control.register(
                               `knownLanguages.${index}.languageName`
                             )}
-                            defaultValue={item.languageName} // set default value from defaultValues
+                            // defaultValue={item.languageName} // set default value from defaultValues
                           />
                         </FormControl>
                         <FormMessage />
@@ -308,35 +327,41 @@ const EmployeeForm = (props: Props) => {
                         <FormControl>
                           <Input
                             disabled={isLoading}
-                            placeholder="example: Developer, Manager, ... etc"
+                            placeholder="from 0 to 100"
                             type="number"
                             {...form.control.register(
                               `knownLanguages.${index}.scoreOutof100`
                             )}
-                            defaultValue={item.scoreOutof100} // set default value from defaultValues
+                            // defaultValue={item.scoreOutof100} // set default value from defaultValues
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
-                  <Button
-                    size={"icon"}
-                    variant={"destructive"}
-                    type="button"
-                    onClick={() =>
-                      form.setValue(
-                        "knownLanguages",
-                        form
-                          .getValues()
-                          .knownLanguages.filter((_, i) => i !== index)
-                      )
-                    }
-                    className="self-end"
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size={"icon"}
+                          variant={"destructive"}
+                          type="button"
+                          onClick={() =>
+                            form.setValue(
+                              "knownLanguages",
+                              form
+                                .getValues()
+                                .knownLanguages.filter((_, i) => i !== index)
+                            )
+                          }
+                          className="self-end"
+                        >
+                          <Trash className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Delete</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               ))}
             </div>

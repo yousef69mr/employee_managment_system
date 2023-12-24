@@ -108,7 +108,7 @@ const EmployeeSearchForm = (props: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} onReset={onReset}>
         <div className="grid gap-4 py-4">
           <div className="flex flex-wrap gap-x-1">
             <FormField
@@ -359,8 +359,8 @@ const EmployeeSearchForm = (props: Props) => {
                         min={0}
                         step={1}
                         onValueChange={(values) => {
-                          console.log(values);
-
+                          // console.log(values);
+                          form.setValue("scoreRange", values);
                           form.setValue("minScore", values[0]);
                           form.setValue("maxScore", values[1]);
                         }}
@@ -381,7 +381,7 @@ const EmployeeSearchForm = (props: Props) => {
               Reset
             </Button>
 
-            <Button type="submit">Search</Button>
+            <Button type="submit">Filter</Button>
           </SheetFooter>
         )}
       </form>

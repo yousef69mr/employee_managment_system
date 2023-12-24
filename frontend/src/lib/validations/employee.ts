@@ -61,7 +61,8 @@ export const EmployeeSchema = object({
       languageName: string().min(1, { message: "Language Name is required" }),
       scoreOutof100: coerce
         .number()
-        .positive({ message: "Employee ID must be more than 0" })
+        .min(0)
+        // .positive({ message: "Employee ID must be more than 0" })
         .max(100),
     })
   ),
@@ -78,16 +79,20 @@ export const EmployeeSearhSchema = object({
   minScore: coerce.number().min(0).max(100),
   maxScore: coerce.number().min(0).max(100),
   scoreRange: array(number())
-  .refine((values) => values.length === 2, {
-    message: 'Range must have exactly two values.',
-  })
-  .refine(([min, max]) => min <= max, {
-    message: 'The first value must be less than or equal to the second value.',
-  })
-  .refine(([min, max]) => min >= 0 && max <= 100, {
-    message: 'Values must be in the range of 0 to 100.',
-  })
-  .refine(([min, max]) => typeof min === 'number' && typeof max === 'number', {
-    message: 'Each value in the range must be a number.',
-  })
+    .refine((values) => values.length === 2, {
+      message: "Range must have exactly two values.",
+    })
+    .refine(([min, max]) => min <= max, {
+      message:
+        "The first value must be less than or equal to the second value.",
+    })
+    .refine(([min, max]) => min >= 0 && max <= 100, {
+      message: "Values must be in the range of 0 to 100.",
+    })
+    .refine(
+      ([min, max]) => typeof min === "number" && typeof max === "number",
+      {
+        message: "Each value in the range must be a number.",
+      }
+    ),
 });

@@ -13,7 +13,7 @@ import ProgressList from "@/components/helpers/progress-list";
 import CellAction from "./cell-actions";
 
 export type EmployeeColumnDef<TData> = ColumnDef<TData> & {
-  type?: string; // Replace 'string' with the actual type you want to use
+  type: string; // Replace 'string' with the actual type you want to use
 };
 
 export const EmployeeColumns: EmployeeColumnDef<EmployeeType>[] = [
@@ -116,5 +116,6 @@ export const EmployeeColumns: EmployeeColumnDef<EmployeeType>[] = [
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
+    type: "action",
   },
 ];

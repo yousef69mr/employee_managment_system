@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   // SheetClose,
@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import EmployeeSearchForm from "../forms/employee-search-form";
 import { Filter } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
@@ -21,7 +21,7 @@ const SearchEmployees = () => {
     sortBy: "asc",
     firstName: "",
     lastName: "",
-    employeeID: undefined,
+    employeeID: 0,
     designation: "",
     languageName: "",
     minScore: 0,
@@ -86,11 +86,11 @@ const SearchEmployees = () => {
 
   return (
     <Sheet open={isOpened} onOpenChange={handleChange}>
-      <SheetTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground py-2 px-4">
-        {/* <Button variant={"outline"} type="button"> */}
-        <Filter className="mr-2 h-4 w-4" />
-        Filter
-        {/* </Button> */}
+      <SheetTrigger asChild>
+        <Button variant={"outline"} type="button">
+          <Filter className="mr-2 h-4 w-4" />
+          Filter
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>

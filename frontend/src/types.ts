@@ -11,7 +11,7 @@ export type ProgressType = {
 export type EmployeeType = {
   lastName: string;
   firstName: string;
-  employeeID: number | undefined;
+  employeeID: number;
   designation: string;
   knownLanguages: LanguageType[];
 };
@@ -21,6 +21,6 @@ export type EmployeeSearchType = Omit<EmployeeType, "knownLanguages"> & {
   minScore?: number;
   maxScore?: number;
   languageName?: string;
-  scoreRange?:[number,number]
+  scoreRange?: [number, number];
   [key: string]: any;
 };
